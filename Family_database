@@ -1,0 +1,73 @@
+import sqlite3
+conn=sqlite3.connect('family.db')
+c=conn.cursor()
+Name=""
+Age=""
+Phone=""
+def create_table():
+	c.execute('CREATE TABLE IF NOT EXISTS Member(name text,age text,phone text)')
+
+def data_entry(a,b,c):
+	a=input("Enter the Name of member:")
+	b=input("Enter the Age of member:")
+	c=input("Enter the Phone of member:")
+	return a,b,c
+
+def data_entry_database():
+	name=x
+	age=y
+	phone=z
+	c.execute("INSERT INTO Member(name,age,phone) VALUES(?,?,?)",(name,age,phone))
+
+def read_from_db():
+	c.execute('SELECT * FROM Member')#this only make its copy
+	for row in c.fetchall():#for printing a row
+		print(row)
+def update_name():#to update name
+	k=input("update at which name:-")
+	j=input("update to which name:-")
+	c.execute("UPDATE Member SET name=(?) WHERE name=(?)",(j,k))
+	conn.commit()
+def update_age():# to update age
+	k=input("update at which age:-")
+	j=input("update to which age:-")
+	c.execute("UPDATE Member SET age=(?) WHERE age=(?)",(j,k))
+	conn.commit()
+def update_phone():# to update phone number
+	k=input("update at which phone:-")
+	j=input("update to which phone:-")
+	c.execute("UPDATE Member SET phone=(?) WHERE phone=(?)",(j,k))
+	conn.commit()
+create_table()#call to create the table
+i=int(input("How many member are in your family:"))
+for temp in range(i):
+	x,y,z=data_entry(Name,Age,Phone)# call to enter the data
+	data_entry_database()#call to enter the dtata in to table
+j=input("Do you want to fill any other member details Yes/No:")
+if j=="Yes" or j=="yes":
+	i=int(input("Enter the number of members you want to add:"))
+	for temp in range(i):
+		x,y,z=data_entry(Name,Age,Phone)#call data_entry() function to enter the data
+		Name=Name+x
+		Age=Age+y
+		Phone=Phone+z
+print("Added succesfully")
+print("Your data")
+conn.commit()#for save the changes
+read_from_db()#for retrive the data
+v=input("you want to update any information:- yes or no ")
+if v=='yes' or v=='Yes':
+	n=input("what do you want to change: name,age,phone?")
+	if n=='name' or n=='Name':
+		update_name()
+	elif n=='age' or n=='Age':
+		update_age()
+	elif n=='phone' or n=='Phone':
+		update_phone()
+print("your updation is ")
+read_from_db()
+
+
+
+c.close()#for vlose the cursor
+conn.close()#for close the connection
